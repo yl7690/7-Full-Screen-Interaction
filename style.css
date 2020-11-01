@@ -9,6 +9,23 @@ canvas {
 #bg {
     width: 30px;
     height: 32px;
-    border-radius: 6px;
-    border: 4px;
+    background-color: #768c9a;
+/*    box-shadow: 2px 1px #8a91a4*/
 }
+
+#control {
+    display: flex;
+    justify-content: space-evenly;
+    background-color: #768c9a;
+    width: 100%;
+    height: 7%;
+    align-items: center;
+}
+
+#brush {
+    height: 32px;
+    width: 110px;
+    border-radius: 10px;
+}
+
+#brush
