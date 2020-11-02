@@ -25,11 +25,20 @@ function setup() {
     brushScale = createSlider(0, 50, 10);
     brushScale.id('scaling');
     
+    brushColor = createColorPicker('#000000');
+    brushColor.id('lineColor');
+    
+    clearPage = createButton('Clear Page');
+    clearPage.id('clear');
+    clearPage.mousePressed(Clear);
+
     
     controlBar = createDiv();
     controlBar.child(bgChange);
     controlBar.child(brush);
     controlBar.child(brushScale);
+    controlBar.child(brushColor);
+    controlBar.child(clearPage);
     controlBar.position(0, 0);
     controlBar.id('control');
     
@@ -54,6 +63,7 @@ function draw() {
             px: pmouseX,
             py: pmouseY,
             weight: brushScale.value(),
+            filling: brushColor.color(),
             type: 'line',
         })
     } else if (val === 'flower' && mouseIsPressed && mouseY > height * 0.07) {
@@ -66,12 +76,11 @@ function draw() {
         })
     }
         
-    print(drawings);
     
     for (let obj of drawings) {
         if(obj.type === 'line') {
             strokeWeight(obj.weight);
-            stroke(0);
+            stroke(obj.filling);
             line(obj.x, obj.y, obj.px, obj.py);
         } else if (obj.type === 'flo') {
             fill(obj.pink);
@@ -84,7 +93,7 @@ function draw() {
 
 
 
-function drawFlower(x,y,fSize){
+function drawFlower(x, y, fSize){
     noStroke();
     circle(x-fSize*0.625, y, fSize);
     circle(x-fSize*0.25, y+fSize*0.625, fSize);
@@ -96,7 +105,9 @@ function drawFlower(x,y,fSize){
     circle(x , y, fSize);
 }
 
-
+function Clear() {
+  drawings.splice(0, drawings.length);
+}
 
 
 function bgHint() {
