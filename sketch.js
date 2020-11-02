@@ -3,13 +3,8 @@ let bgChange;
 let brush;
 let brushScale;
 let drawSeal;
-let dots = [];
-let flowers = [];
-let seals = [];
+let drawings = [];
 
-function preload() {
-    drawSeal = loadImage('Characterfront.png');
-}
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
@@ -37,58 +32,56 @@ function setup() {
     controlBar.child(brushScale);
     controlBar.position(0, 0);
     controlBar.id('control');
+    
+
 }
 
 function draw() {
-    background(bgChange.color());
+    background(220);
+    
+    noStroke();
+    fill(bgChange.color());
+    rect(0, 0, windowWidth, windowHeight);
+
     
     let val = brush.value();
 
-    
-    
-    
+
     if (val === 'single line' && mouseIsPressed && mouseY > height * 0.07) {
-    dots.push({
-        x: mouseX,
-        y: mouseY,
-        size: 5,
-        px: pmouseX,
-        py: pmouseY,
-        weight: brushScale.value(),
-    })
-}
-    for (let dot of dots) {
-        fill(0);
-        strokeWeight(dot.weight);
-        line(dot.x, dot.y, dot.px, dot.py);
-    }
-    
-    if (val === 'flower' && mouseIsPressed && mouseY > height * 0.07) {
-        flowers.push({
+        drawings.push({
+            x: mouseX,
+            y: mouseY,
+            px: pmouseX,
+            py: pmouseY,
+            weight: brushScale.value(),
+            type: 'line',
+        })
+    } else if (val === 'flower' && mouseIsPressed && mouseY > height * 0.07) {
+        drawings.push({
             x: mouseX,
             y: mouseY,
             size:brushScale.value(),
             pink : color(255,random(110,160), random(120,150)),
+            type: 'flo',
         })
     }
+        
+    print(drawings);
     
-    for (let fw of flowers) {
-        fill(fw.pink);
-        drawFlower(fw.x, fw.y, fw.size);
+    for (let obj of drawings) {
+        if(obj.type === 'line') {
+            strokeWeight(obj.weight);
+            stroke(0);
+            line(obj.x, obj.y, obj.px, obj.py);
+        } else if (obj.type === 'flo') {
+            fill(obj.pink);
+            drawFlower(obj.x, obj.y, obj.size);
+        }
     }
     
-//    if (val === 'seal' && mouseIsPressed) {
-//        seals.push({
-//            x: mouseX,
-//            y: mouseY,
-//            size: brushScale.value(),
-//        })
-//    }
-//    
-//    for (let s of seals) {
-//        image(drawSeal, s.x, s.y, s.size);
-//    }
 }
+    
+
 
 
 function drawFlower(x,y,fSize){
