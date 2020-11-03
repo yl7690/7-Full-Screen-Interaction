@@ -5,42 +5,43 @@ let brushScale;
 let drawSeal;
 let drawings = [];
 let erasing = false;
+let logo;
 
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
     
     frameRate(120);
-    bgChange = createColorPicker('#ffffff');
-    bgChange.id('bg');
-    
+    bgChange = createColorPicker('#8DC6EB');
+    bgChange.class('cp');
     
     brush = createSelect();
     brush.id('brush');
     brush.option('single line');
     brush.option('flower');
-    brush.option('seal');
    
-    
     brushScale = createSlider(0, 50, 10);
     brushScale.id('scaling');
     
-    brushColor = createColorPicker('#000000');
+    brushColor = createColorPicker('#063186');
     brushColor.id('lineColor');
+    brushColor.class('cp')
     
     clearPage = createButton('Clear Page');
-    clearPage.id('clear');
     clearPage.mousePressed(Clear);
+    clearPage.class('button');
     
     eraserButton = createButton('Eraser');
     eraserButton.mousePressed(eraser);
-
-
+    eraserButton.class('button');
+    
+    logo = createImg('logo.png', "logo");
+    logo.id('Logo');
 
     
     controlBar = createDiv();
-    controlBar2 = createDiv();
     
+    controlBar.child(logo);
     controlBar.child(bgChange);
     controlBar.child(brush);
     controlBar.child(brushScale);
@@ -50,7 +51,10 @@ function setup() {
     
     controlBar.position(0, 0);
     controlBar.id('control');
+    
+    controlBarPosition();
 }
+
 
 function draw() {
     background(220);
@@ -59,6 +63,7 @@ function draw() {
     fill(bgChange.color());
     rect(0, 0, windowWidth, windowHeight);
 
+    print(windowWidth);
     
     let val = brush.value();
     
@@ -83,6 +88,7 @@ function draw() {
         })
     }
         
+    
     let pink = color(255,random(110,160), random(120,150));
     
     if (val === 'single line' && !erasing) {
@@ -93,8 +99,7 @@ function draw() {
         drawFlower(mouseX, mouseY, brushScale.value());
     }
         
-        
-        
+           
     for (let obj of drawings) {
         if (!obj.dead) {
             if(obj.type === 'line') {
@@ -108,17 +113,18 @@ function draw() {
         }
     }  
     
+    
     if (erasing) {
         stroke(0);
         strokeWeight(5);
         fill(255);
         ellipse(mouseX, mouseY, brushScale.value());
         
-    for (let obj of drawings) {
-        if (dist(obj.x, obj.y, mouseX, mouseY) < brushScale.value()){
-            obj.dead = true;
+        for (let obj of drawings) {
+            if (dist(obj.x, obj.y, mouseX, mouseY) < brushScale.value()){
+                obj.dead = true;
+            }
         }
-    }
     }
 }
 
@@ -140,6 +146,7 @@ function Clear() {
   drawings.splice(0, drawings.length);
 }
 
+
 function eraser() {
     if (!erasing) {
         erasing = true;
@@ -149,6 +156,20 @@ function eraser() {
 }
 
 
+function controlBarPosition() {
+    if (width > 600){
+        controlBar.style('flexWrap', 'nowrap');
+        controlBar.style('height', '9%');
+    } else if (width<600) {
+        controlBar.style('flexWrap', 'wrap');
+        controlBar.style('height', '20%');
+        controlBar.style('gap', '20px');
+        controlBar.style('alignItems', 'center');
+    }
+}
+
+
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
+    controlBarPosition();
 }

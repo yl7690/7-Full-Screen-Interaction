@@ -6,23 +6,63 @@ canvas {
     display: block;
 }
 
-#bg {
-    width: 30px;
-    height: 32px;
-    background-color: #768c9a;
+.cp {
+    width: 32px;
+    height: 36px;
+    background-color: #C45003;
+    border: none;
+    margin: 0px;
+    border-radius: 90px;
 }
 
 #control {
     display: flex;
-    justify-content: space-evenly;
-    background-color: #768c9a;
+    justify-content: space-around;
+    background-color: #C45003;
     width: 100%;
-    height:8%;
     align-items: center;
+    border-radius: 16px;
+    align-content: space-around;
 }
+
+#Logo {
+    width: 70px;
+    height: 60px;
+}
+
 
 #brush {
     height: 32px;
     width: 110px;
     border-radius: 10px;
+    background-color: #D7820A;
+    border: none;
+    box-shadow: 0 3px #553508; 
+    outline: none;
 }
+
+#scaling {
+    height: 32px;
+    width: 130px;
+    color: #063186;
+}
+
+
+.button {
+    width: 90px;
+    height: 32px;
+    background-color: #D7820A;
+    border: none;
+    box-shadow: 0 3px #553508; 
+    border-radius: 5px;
+    outline: none;
+    
+    transition: all 0.1s;
+}
+
+.button:hover {background-color: #ba7009;}
+
+.button:active {
+    background-color: #ba7009;
+    box-shadow: 0 3px #666;
+    transform: translateY(2px);
