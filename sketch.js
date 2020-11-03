@@ -19,6 +19,7 @@ function setup() {
     brush.id('brush');
     brush.option('single line');
     brush.option('flower');
+    brush.option('circles');
    
     brushScale = createSlider(0, 50, 10);
     brushScale.id('scaling');
@@ -86,18 +87,17 @@ function draw() {
             pink : color(255,random(110,160), random(120,150)),
             type: 'flo',
         })
+    } else if (val === 'circles' && mouseIsPressed && mouseY > height * 0.07) {
+        drawings.push({
+            x: mouseX,
+            y: mouseY,
+            size:brushScale.value(),
+            filling: brushColor.color(),
+            type: 'ccs',
+        })
     }
         
-    
-    let pink = color(255,random(110,160), random(120,150));
-    
-    if (val === 'single line' && !erasing) {
-        fill(brushColor.color());
-        ellipse(mouseX, mouseY, brushScale.value());
-    } else if (val === 'flower' && !erasing) {
-        fill(pink);
-        drawFlower(mouseX, mouseY, brushScale.value());
-    }
+
         
            
     for (let obj of drawings) {
@@ -109,7 +109,10 @@ function draw() {
             } else if (obj.type === 'flo') {
             fill(obj.pink);
             drawFlower(obj.x, obj.y, obj.size);
-        }
+            } else if (obj.type === 'ccs') {
+            fill(obj.filling);
+            drawCircles(obj.x, obj.y, obj.size);
+            }
         }
     }  
     
@@ -126,6 +129,21 @@ function draw() {
             }
         }
     }
+    
+        
+    let pink = color(255,random(110,160), random(120,150));
+    
+    if (val === 'single line' && !erasing) {
+        fill(brushColor.color());
+        ellipse(mouseX, mouseY, brushScale.value());
+    } else if (val === 'flower' && !erasing) {
+        fill(pink);
+        drawFlower(mouseX, mouseY, brushScale.value());
+    } else if (val === 'circles' && !erasing) {
+        fill(brushColor.color());
+        drawCircles(mouseX, mouseY, brushScale.value());
+    }
+    
 }
 
 
@@ -139,6 +157,20 @@ function drawFlower(x, y, fSize){
     circle(x-fSize*0.25, y-fSize*0.625, fSize);
     fill(255,199,65);
     circle(x , y, fSize);
+}
+
+
+function drawCircles(x, y, size){
+  push();
+  noStroke();
+  translate(x,y);
+    for (let j=0;j<8;j++){
+      rotate(radians(45));
+      ellipse (0,0,size * 1.2);
+      ellipse(size * 2.1, 0, size * 1.5);
+      ellipse(size * 4.5, 0, size * 3);
+  }
+  pop();
 }
 
 
