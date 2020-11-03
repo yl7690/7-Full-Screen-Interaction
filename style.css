@@ -21,7 +21,7 @@ canvas {
     background-color: #C45003;
     width: 100%;
     align-items: center;
-    border-radius: 16px;
+    border-radius: 5px 5px 16px 16px;
     align-content: space-around;
 }
 
