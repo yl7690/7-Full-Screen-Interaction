@@ -4,6 +4,7 @@ let brush;
 let brushScale;
 let drawSeal;
 let drawings = [];
+let erasing = false;
 
 
 function setup() {
@@ -12,7 +13,6 @@ function setup() {
     frameRate(120);
     bgChange = createColorPicker('#ffffff');
     bgChange.id('bg');
-    bgChange.mouseOver(bgHint);
     
     
     brush = createSelect();
@@ -31,18 +31,25 @@ function setup() {
     clearPage = createButton('Clear Page');
     clearPage.id('clear');
     clearPage.mousePressed(Clear);
+    
+    eraserButton = createButton('Eraser');
+    eraserButton.mousePressed(eraser);
+
+
 
     
     controlBar = createDiv();
+    controlBar2 = createDiv();
+    
     controlBar.child(bgChange);
     controlBar.child(brush);
     controlBar.child(brushScale);
     controlBar.child(brushColor);
+    controlBar.child(eraserButton);
     controlBar.child(clearPage);
+    
     controlBar.position(0, 0);
     controlBar.id('control');
-    
-
 }
 
 function draw() {
@@ -54,8 +61,8 @@ function draw() {
 
     
     let val = brush.value();
-
-
+    
+    
     if (val === 'single line' && mouseIsPressed && mouseY > height * 0.07) {
         drawings.push({
             x: mouseX,
@@ -76,21 +83,44 @@ function draw() {
         })
     }
         
+    let pink = color(255,random(110,160), random(120,150));
     
+    if (val === 'single line' && !erasing) {
+        fill(brushColor.color());
+        ellipse(mouseX, mouseY, brushScale.value());
+    } else if (val === 'flower' && !erasing) {
+        fill(pink);
+        drawFlower(mouseX, mouseY, brushScale.value());
+    }
+        
+        
+        
     for (let obj of drawings) {
-        if(obj.type === 'line') {
+        if (!obj.dead) {
+            if(obj.type === 'line') {
             strokeWeight(obj.weight);
             stroke(obj.filling);
             line(obj.x, obj.y, obj.px, obj.py);
-        } else if (obj.type === 'flo') {
+            } else if (obj.type === 'flo') {
             fill(obj.pink);
             drawFlower(obj.x, obj.y, obj.size);
         }
+        }
+    }  
+    
+    if (erasing) {
+        stroke(0);
+        strokeWeight(5);
+        fill(255);
+        ellipse(mouseX, mouseY, brushScale.value());
+        
+    for (let obj of drawings) {
+        if (dist(obj.x, obj.y, mouseX, mouseY) < brushScale.value()){
+            obj.dead = true;
+        }
     }
-    
+    }
 }
-    
-
 
 
 function drawFlower(x, y, fSize){
@@ -105,14 +135,19 @@ function drawFlower(x, y, fSize){
     circle(x , y, fSize);
 }
 
+
 function Clear() {
   drawings.splice(0, drawings.length);
 }
 
-
-function bgHint() {
-    text('Click here to change background color', mouseX, mouseY);
+function eraser() {
+    if (!erasing) {
+        erasing = true;
+    } else if (erasing) {
+        erasing = false;
+    }
 }
+
 
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
